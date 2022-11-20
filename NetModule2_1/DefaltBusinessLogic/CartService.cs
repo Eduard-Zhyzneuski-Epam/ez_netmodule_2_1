@@ -16,25 +16,35 @@ namespace NetModule2_1.DefaultBusinessLogic
         {
             ValidateItem(item);
             var cart = cartRepository.LoadCart(id);
+            cart ??= new Cart() { Id = id, Items = new List<DAL.Item>() };
             cart.Items.Add(Mapping.Map<BAL.Item, DAL.Item>(item));
             cartRepository.SaveCart(cart);
         }
 
         public List<BAL.Item> GetItemsList(string id)
         {
-            var cart = cartRepository.LoadCart(id);
+            var cart = LoadExistingCart(id);
             return cart.Items.Select(i => Mapping.Map<DAL.Item, BAL.Item>(i)).ToList();
         }
 
         public void RemoveItem(string cartId, int itemId)
         {
-            var cart = cartRepository.LoadCart(cartId);
+            var cart = LoadExistingCart(cartId);
             var item = cart.Items.FirstOrDefault(i => i.Id == itemId);
             if (item != null)
             {
                 cart.Items.Remove(item);
                 cartRepository.SaveCart(cart);
             }
+        }
+
+        private Cart LoadExistingCart(string id)
+        {
+            var cart = cartRepository.LoadCart(id);
+            if (cart is not null)
+                return cart;
+            else
+                throw new CartNotFoundException();
         }
 
         private static void ValidateItem(BAL.Item item)

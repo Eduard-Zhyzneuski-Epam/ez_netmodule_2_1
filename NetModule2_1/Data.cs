@@ -3,9 +3,9 @@ using NetModule2_1.DAL;
 
 namespace NetModule2_1
 {
-    internal static class DataSetup
+    public static class Data
     {
-        internal static void Setup()
+        public static void Setup()
         {
             File.Delete("carts.db");
             using var db = new LiteDatabase("carts.db");

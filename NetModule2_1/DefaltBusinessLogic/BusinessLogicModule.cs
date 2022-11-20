@@ -3,7 +3,7 @@ using NetModule2_1.BAL;
 
 namespace NetModule2_1.DefaultBusinessLogic
 {
-    internal class BusinessModuleLogic : Module
+    public class BusinessLogicModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

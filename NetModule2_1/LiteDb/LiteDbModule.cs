@@ -3,7 +3,7 @@ using NetModule2_1.DAL;
 
 namespace NetModule2_1.LiteDb
 {
-    internal class LiteDbModule : Module
+    public class LiteDbModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

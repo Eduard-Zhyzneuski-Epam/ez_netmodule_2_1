@@ -16,7 +16,7 @@ namespace NetModule2_1.LiteDb
         {
             using var db = new LiteDatabase(connectionString);
             var carts = db.GetCollection<Cart>();
-            return carts.Find(c => c.Id == id, 0, 1).First();
+            return carts.Find(c => c.Id == id, 0, 1).FirstOrDefault();
         }
 
         public void SaveCart(Cart cart)

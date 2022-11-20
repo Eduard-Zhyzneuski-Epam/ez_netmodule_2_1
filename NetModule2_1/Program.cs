@@ -6,11 +6,11 @@ using NetModule2_1.LiteDb;
 using Newtonsoft.Json;
 
 var builder = new ContainerBuilder();
-builder.RegisterModule<BusinessModuleLogic>();
+builder.RegisterModule<BusinessLogicModule>();
 builder.RegisterModule<LiteDbModule>();
 var container = builder.Build();
 
-DataSetup.Setup();
+Data.Setup();
 
 var cartService = container.Resolve<ICartService>();
 var beforeFirst = cartService.GetItemsList("First");
