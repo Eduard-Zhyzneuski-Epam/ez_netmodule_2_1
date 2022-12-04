@@ -27,6 +27,21 @@ namespace NetModule2_1.DefaultBusinessLogic
             return cart.Items.Select(i => Mapping.Map<DAL.Item, BAL.Item>(i)).ToList();
         }
 
+        public void UpdateItem(BAL.Item changedItem)
+        {
+            ValidateItem(changedItem);
+            var newDbItem = Mapping.Map<BAL.Item, DAL.Item>(changedItem);
+            cartRepository.BulkCartUpdate(cart =>
+            {
+                var oldItemPlace = cart.Items.FindIndex(oldItem => newDbItem.Id == oldItem.Id);
+                if (oldItemPlace != -1)
+                {
+                    cart.Items.RemoveAt(oldItemPlace);
+                    cart.Items.Insert(oldItemPlace, newDbItem);
+                }
+            });
+        }
+
         public void RemoveItem(string cartId, int itemId)
         {
             var cart = LoadExistingCart(cartId);

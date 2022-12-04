@@ -4,5 +4,6 @@
     {
         Cart LoadCart(string id);
         void SaveCart(Cart cart);
+        void BulkCartUpdate(Action<Cart> updateAction);
     }
 }

@@ -6,7 +6,9 @@ using Microsoft.OpenApi.Models;
 using NetModule2_1;
 using NetModule2_1.API;
 using NetModule2_1.DefaultBusinessLogic;
+using NetModule2_1.EAL;
 using NetModule2_1.LiteDb;
+using NetModule2_1.RabbitMq;
 using System.Reflection;
 
 [assembly: ApiConventionType(typeof(CartServiceApiConvention))]
@@ -21,6 +23,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
 {
     builder.RegisterModule<BusinessLogicModule>();
     builder.RegisterModule<LiteDbModule>();
+    builder.RegisterModule<RabbitMqModule>();
 });
 
 builder.Services.AddControllers(options =>
@@ -70,6 +73,12 @@ if (app.Environment.IsDevelopment())
         }
     });
 }
+
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    var changedItemSubscriber = app.Services.GetRequiredService<IChangedItemEventSubscriber>();
+    changedItemSubscriber.Subscribe();
+});
 
 app.UseHttpsRedirection();
 

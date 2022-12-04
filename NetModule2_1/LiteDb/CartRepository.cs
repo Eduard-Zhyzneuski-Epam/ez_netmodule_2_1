@@ -25,5 +25,17 @@ namespace NetModule2_1.LiteDb
             var carts = db.GetCollection<Cart>();
             carts.Upsert(cart);
         }
+
+        public void BulkCartUpdate(Action<Cart> update)
+        {
+            using var db = new LiteDatabase(connectionString);
+            var cartsCollection = db.GetCollection<Cart>();
+            var carts = cartsCollection.FindAll();
+            foreach (var cart in carts)
+            {
+                update(cart);
+            }
+            cartsCollection.Update(carts);
+        }
     }
 }
