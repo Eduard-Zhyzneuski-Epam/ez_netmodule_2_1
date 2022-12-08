@@ -25,7 +25,9 @@ namespace NetModule2_1.RabbitMq
         public void Subscribe()
         {
             session ??= OpenSession();
-            session.QueueDeclare("item_changed", true, false, false);
+            session.ExchangeDeclare("dead_letters", "direct", true, false);
+            var args = new Dictionary<string, object> { { "x-dead-letters-exchange", "dead_letters" } };
+            session.QueueDeclare("item_changed", true, false, false, args);
             var consumer = new EventingBasicConsumer(session);
             consumer.Received += (sender, ea) =>
             {
